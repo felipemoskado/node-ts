@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: felipemoskado/node-action
-          ref: b350b858a6fde95fef715397ae9833d428568c27
+          ref: b60c839789738511a8564e9b924861e889705908
           token: ${{ secrets.ACTION_TOKEN }}
           path: .github/actions/node-action
 
