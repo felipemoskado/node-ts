@@ -1,0 +1,41 @@
+name: Send image to my docker repository
+
+# on:
+#   push:
+#     branches:
+#       - 'release/**'
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Enviar imagem
+
+    steps:
+      - name: Checkout your project
+        uses: actions/checkout@v2
+
+      - name: Use Node.js 
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - run: npm install
+      - run: npm run build --if-present
+      - run: npm test
+
+      - name: Checkout node-action repository
+        uses: actions/checkout@v2
+        with:
+          repository: felipemoskado/node-action
+          ref: 69233cae151662683fc4dc696825f4857c2f08f5
+          token: ${{ secrets.ACTION_TOKEN }}
+          path: .github/actions/node-action
+
+      - name: Build and Push to Harbor
+        uses: ./.github/actions/node-action
+        with:
+          tag: "felipemoskado/node-ts:1.0.0"
+          username: "${{ secrets.USERNAME }}"
+          password: "${{ secrets.PASSWORD }}"
+          registry: "${{ secrets.REGISTRY }}"
+          context: ${{ github.workspace }}
